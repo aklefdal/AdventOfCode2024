@@ -5,8 +5,8 @@ open System.IO
 
 // Input
 let input =
-    File.ReadAllLines @"input02.txt"
-    |> Array.map Utils.parseLineOfInts
+    File.ReadAllLines "input02.txt"
+    |> Array.map Utils.toInts
 
 let inputSample =
     """7 6 4 2 1
@@ -16,17 +16,12 @@ let inputSample =
        8 6 4 4 1
        1 3 6 7 9"""
     |> Utils.splitLines 
-    |> Seq.map Utils.parseLineOfInts
-    |> Seq.toArray
+    |> Array.map Utils.toInts
 
 // Part 1
 let isLevelSorted (level: int[]) =
-    if (level |> Array.sort) = level then
-        true
-    elif (level |> Array.sortDescending) = level then
-        true
-    else
-        false    
+    (level |> Array.sort) = level 
+    || (level |> Array.sortDescending) = level
 
 let isLevelSafe (level: int[]) =
     let diffs =

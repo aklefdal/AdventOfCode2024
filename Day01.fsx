@@ -6,15 +6,19 @@ open System.IO
 
 // Input
 let input =
-    File.ReadAllLines @"input01.txt"
-    |> Array.map Utils.parseLineOfInts
+    File.ReadAllLines "input01.txt"
+    |> Array.map Utils.toInts
 
 // Part 1
-let list1 = input |> Array.map (fun a -> a.[0]) |> Array.sort
-let list2 = input |> Array.map (fun a -> a.[1]) |> Array.sort
 
 let solution1 =
-    Array.zip list1 list2 |> Array.map (fun (a, b) -> Math.Abs(a - b)) |> Array.sum
+    input
+    |> Array.map (fun a -> a.[0], a.[1])
+    |> Array.unzip
+    |> fun (a, b) -> a |> Array.sort, b |> Array.sort
+    ||> Array.zip
+    |> Array.sumBy (fun (a, b) -> Math.Abs(a - b)) 
+
 
 // Part 2
 let counts = input |> Array.map (fun a -> a.[1]) |> Array.countBy id |> dict
