@@ -7,6 +7,9 @@ let toInts (line: string) =
 let splitLines (s: string) =
     s.Split([|'\n'; '\r'|], StringSplitOptions.RemoveEmptyEntries)
 
+let split (separator: string) (s: string) =
+    s.Split(separator)
+
 let join (separator: string) (lines: string seq) =
     String.Join(separator, lines)
 
