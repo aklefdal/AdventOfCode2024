@@ -15,12 +15,12 @@ let inputSample =
        1 3 2 4 5
        8 6 4 4 1
        1 3 6 7 9"""
-    |> Utils.splitLines 
+    |> Utils.splitLines
     |> Array.map Utils.toInts
 
 // Part 1
 let isLevelSorted (level: int[]) =
-    (level |> Array.sort) = level 
+    (level |> Array.sort) = level
     || (level |> Array.sortDescending) = level
 
 let isLevelSafe (level: int[]) =
@@ -28,9 +28,10 @@ let isLevelSafe (level: int[]) =
         level
         |> Array.pairwise
         |> Array.map (fun (a, b) -> Math.Abs(b - a))
+
     let maxDiff = diffs |> Array.max
     let minDiff = diffs |> Array.min
-    
+
     minDiff >= 1 && maxDiff <= 3
 
 let solution1 =
@@ -45,19 +46,16 @@ let check (level: int[]) =
     level |> isLevelSorted && level |> isLevelSafe
 
 let checkWithDampener (level: int[]) =
-    seq {0 .. level.Length - 1}
+    seq { 0 .. level.Length - 1 }
     |> Seq.map (fun i -> level |> Array.removeAt i)
     |> Seq.exists check
 
 let checkAll (level: int[]) =
     level |> check || level |> checkWithDampener
 
-let sampleSolution2 = 
+let sampleSolution2 =
     inputSample
     |> Array.filter checkAll
     |> Array.length
 
-let solution2 =
-    input
-    |> Array.filter checkAll
-    |> Array.length
+let solution2 = input |> Array.filter checkAll |> Array.length
