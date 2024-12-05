@@ -5,8 +5,9 @@ let toInts (line: string) =
     line.Split(' ', StringSplitOptions.RemoveEmptyEntries)
     |> Array.map int
 
-let splitLines (s: string) =
-    s.Split([| '\n'; '\r' |], StringSplitOptions.RemoveEmptyEntries)
+let trim (s: string) = s.Trim()
+
+let splitLines (s: string) = s.Split([| '\n' |]) |> Array.map trim
 
 let split (separator: string) (s: string) = s.Split(separator)
 
