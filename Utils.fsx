@@ -15,5 +15,9 @@ let join (separator: string) (lines: string seq) = String.Join(separator, lines)
 
 let regexMatches (pattern: string) (s: string) = Regex.Matches(s, pattern)
 
+let toChars (s: string) = s.ToCharArray()
+
 let isAllNumeric (s: string) =
-    s.ToCharArray() |> Array.forall Char.IsDigit
+    s
+    |> toChars
+    |> Array.forall Char.IsDigit
