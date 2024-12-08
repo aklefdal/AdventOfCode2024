@@ -18,6 +18,4 @@ let regexMatches (pattern: string) (s: string) = Regex.Matches(s, pattern)
 let toChars (s: string) = s.ToCharArray()
 
 let isAllNumeric (s: string) =
-    s
-    |> toChars
-    |> Array.forall Char.IsDigit
+    s |> toChars |> Array.forall Char.IsDigit

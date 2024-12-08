@@ -10,13 +10,13 @@ let inputSample = """xmul(2,4)%&mul[3,7]!@^do_not_mul(5,5)+mul(32,64]then(mul(11
 // Part 1
 let pattern = @"mul\(\d+,\d+\)"
 
-let getInts (s: string) = s.[4 .. s.Length - 2].Split(",")
+let getInts (s: string) = s[4 .. s.Length - 2].Split(",")
 
 let solve1 (ss: string) =
     ss
     |> Utils.regexMatches pattern
     |> Seq.map (fun m -> m.Value |> getInts)
-    |> Seq.sumBy (fun a -> (a.[0] |> int) * (a.[1] |> int))
+    |> Seq.sumBy (fun a -> (a[0] |> int) * (a[1] |> int))
 
 let solution1Sample = inputSample |> solve1
 
@@ -36,8 +36,8 @@ let solve2 (ss: string) =
     |> Array.map getUntilDont
     |> Utils.join "|"
     |> Utils.regexMatches pattern
-    |> Seq.map (fun m -> m.Value.[4 .. m.Value.Length - 2].Split(","))
-    |> Seq.sumBy (fun a -> (a.[0] |> int) * (a.[1] |> int))
+    |> Seq.map (fun m -> m.Value[4 .. m.Value.Length - 2].Split(","))
+    |> Seq.sumBy (fun a -> (a[0] |> int) * (a[1] |> int))
 
 let sampleSolution2 = sample2 |> solve2
 
