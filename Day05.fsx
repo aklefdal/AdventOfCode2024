@@ -36,13 +36,16 @@ let inputSample =
 97,13,75,29,47"""
     |> Utils.splitLines
 
-let getOrderings (lines: string[]) =
+type Orderings = Set<int * int>
+
+let getOrderings (lines: string[])  : Orderings=
     lines
     |> Array.takeWhile (fun s -> s.Contains('|'))
     |> Array.map (fun s -> s.Split("|"))
     |> Array.map (fun a -> a[0] |> int, a[1] |> int)
+    |> Set.ofArray
 
-let getUpdates (lines: string[]) (ordLength) =
+let getUpdates (lines: string[]) ordLength =
     lines
     |> Array.skip (ordLength + 1)
     |> Array.map (fun s -> s.Split(",") |> Array.map int)
@@ -56,16 +59,16 @@ let isInOrder (update: int[]) (first: int, second: int) =
     | _ -> true
 
 // Part 1
-let isOrdered (orderings: (int * int)[]) (update: int[]) =
-    orderings |> Array.forall (isInOrder update)
+let isOrdered (orderings: Orderings) (update: int[]) =
+    orderings |> Set.forall (isInOrder update)
 
 let getMiddleNumber (update: int[]) =
-    let middleInde = (update.Length - 1) / 2
-    update.[middleInde]
+    let middleLength = (update.Length - 1) / 2
+    update[middleLength]
 
 let sampleSolution1 =
     let orderings = inputSample |> getOrderings
-    let updates = getUpdates inputSample orderings.Length
+    let updates = getUpdates inputSample orderings.Count
 
     updates
     |> Array.filter (isOrdered orderings)
@@ -75,7 +78,7 @@ let sampleSolution1 =
 
 let solution1 =
     let orderings = input |> getOrderings
-    let updates = getUpdates input orderings.Length
+    let updates = getUpdates input orderings.Count
 
     updates
     |> Array.filter (isOrdered orderings)
@@ -87,27 +90,16 @@ let sortTwoNumbers (orderings: (int * int)[]) (one: int, two: int) =
     let notSorted = orderings |> Array.contains (two, one)
     if notSorted then (two, one) else (one, two)
 
-let sortUpdate (orderings: (int * int)[]) (update: int[]) =
-    let mutable sorted = false
-    let mutable arr = update
-
-    while not sorted do
-        sorted <- true
-
-        for i = 0 to arr.Length - 2 do
-            let pair = (arr.[i], arr.[i + 1])
-            let sortedPair = pair |> sortTwoNumbers orderings
-
-            if sortedPair <> pair then
-                arr.[i] <- sortedPair |> fst
-                arr.[i + 1] <- sortedPair |> snd
-                sorted <- false
-
-    arr
+let sortUpdate (orderings: Orderings) (update: int[]) =
+    update
+    |> Array.sortWith (fun a b ->
+        if orderings |> Set.contains (a, b) then -1
+        elif orderings |> Set.contains (b, a) then 1
+        else 0)
 
 let sampleSolution2 =
     let orderings = inputSample |> getOrderings
-    let updates = getUpdates inputSample orderings.Length
+    let updates = getUpdates inputSample orderings.Count
 
     updates
     |> Array.filter (not << (isOrdered orderings))
@@ -117,7 +109,7 @@ let sampleSolution2 =
 
 let solution2 =
     let orderings = input |> getOrderings
-    let updates = getUpdates input orderings.Length
+    let updates = getUpdates input orderings.Count
 
     updates
     |> Array.filter (not << (isOrdered orderings))
